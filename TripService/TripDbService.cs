@@ -29,16 +29,27 @@ namespace lab9.Service
 
 
 
-        public async Task<bool> AddKlientToTrip(ClientDTO client)
+        public async Task<bool> AddKlientToTrip(ClientDTO client,int idTrip)
         {
             try
             {
+
+                Client mainClient;
                 var recordExist = _context.Clients.FirstOrDefault(x => x.Pesel == client.Pesel);
-                //var clientRegistered = _context.ClientTrips.Any(t => t.IdClient == id && t.IdTrip = client.IdTrip);
-                var TripExist = _context.Trips.Any(x => x.IdTrip == client.IdTrip);
+                bool tripInClient = false;
+               
+                bool TripExist = _context.Trips.Any(x => x.IdTrip == client.IdTrip);
+
                 int clientsCount = await _context.Clients.CountAsync();
+
+                if (!TripExist)
+                {
+                    throw new Exception("trip nie istnieje");
+                }
+
                 if (recordExist == null)
                 {
+
 
 
                     Client client1 = new()
@@ -56,26 +67,54 @@ namespace lab9.Service
 
                     ClientTrip cl1 = new()
                     {
-                        PaymentDate=client.PaymentDate
+                       IdClient = client1.IdClient,
+                       IdTrip = idTrip,
+                       RegisteredAt= DateTime.Now,
+                       PaymentDate=null,
                     };
                     _context.Add(cl1);
 
-                    Trip trip1 = new()
-                    {
-                        IdTrip= client.IdTrip,
-                        Name = client.Name,
-                        
-                    };
-                    _context.Add(trip1);
+                    //sprawdzenie wycieczki
+                    tripInClient = _context.ClientTrips.Any(x => x.IdClient == client1.IdClient);
+                    mainClient = client1;
 
+
+
+                }
+                else
+                {
+                    
+                    Client client1 = recordExist;
+                    //sprawdzenie wycieczki
+                    tripInClient = _context.ClientTrips.Any(x => x.IdClient == client1.IdClient);
+                    mainClient = client1;
+                }
+
+                if(tripInClient)
+                {
+                    throw new Exception("Klient jest zapisany na wycieczke");
+                }
+                else
+                {
+                    ClientTrip clientTrip = new()
+                    {
+                        IdClient= mainClient.IdClient,
+                        IdTrip  = idTrip,
+                        RegisteredAt= DateTime.Now,
+                        PaymentDate=null,
+                    };
                     
                 }
-                _context.SaveChanges();
+
+                await _context.SaveChangesAsync();
+
 
                 return true;
             }
             catch(Exception ex)
             {
+
+               
                 return false;
             }            
             

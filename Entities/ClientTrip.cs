@@ -5,6 +5,7 @@ namespace lab9.Entities;
 
 public partial class ClientTrip
 {
+
     public int IdClient { get; set; }
 
     public int IdTrip { get; set; }

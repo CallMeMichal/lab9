@@ -26,10 +26,10 @@ namespace lab9.Controllers
         }
 
 
-        [HttpPost("{idTrip}/clients")]
-        public async Task<IActionResult> AddClientToTrip(CancellationToken cancellationToken, ClientDTO client)
+        [HttpPost("{IdTrip}/clients")]
+        public async Task<IActionResult> AddClientToTrip(CancellationToken cancellationToken, ClientDTO client, int IdTrip)
         {
-            var z = await _tripDbService.AddKlientToTrip(client);
+            var z = await _tripDbService.AddKlientToTrip(client, IdTrip);
             return Ok(z);
         }
 
