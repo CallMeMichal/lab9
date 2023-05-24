@@ -75,7 +75,7 @@ namespace lab9.Service
                     _context.Add(cl1);
 
                     //sprawdzenie wycieczki
-                    tripInClient = _context.ClientTrips.Any(x => x.IdClient == client1.IdClient);
+                   // tripInClient = _context.ClientTrips.Any(x => x.IdClient == client1.IdClient);
                     mainClient = client1;
 
 
@@ -86,7 +86,7 @@ namespace lab9.Service
                     
                     Client client1 = recordExist;
                     //sprawdzenie wycieczki
-                    tripInClient = _context.ClientTrips.Any(x => x.IdClient == client1.IdClient);
+                   // tripInClient = _context.ClientTrips.Any(x => x.IdClient == client1.IdClient);
                     mainClient = client1;
                 }
 
